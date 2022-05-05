@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/order-saga?createDatabaseIfNotExist=true
+    username: root
+    password: root
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+
+  cloud:
+    function:
+      definition: orderSupplier; paymentEventConsumer
+    stream:
+      bindings:
+        orderSupplier-out-0:
+          destination: order-event
+        paymentEventConsumer-in-0:
+          destination: payment-event
